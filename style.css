@@ -21,6 +21,7 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    overflow: visible;
 }
 
 header {
@@ -42,30 +43,45 @@ h1 {
 /* 时间线样式优化 */
 .timeline {
     padding: 60px 0;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .timeline-items {
     position: relative;
-    padding: 40px 0;
+    padding: 40px 20px;
+    display: flex;
+    min-width: max-content;
+    margin: 0 auto;
+    gap: 20px;
 }
 
 .timeline-items::before {
     content: '';
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(180deg, rgba(0,122,255,0.1) 0%, var(--primary-color) 50%, rgba(0,122,255,0.1) 100%);
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 4px;
+    background: linear-gradient(90deg, rgba(0,122,255,0.1) 0%, var(--primary-color) 50%, rgba(0,122,255,0.1) 100%);
     border-radius: 2px;
 }
 
 .timeline-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 60px;
     position: relative;
+    margin: 0 40px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.timeline-item:nth-child(odd) {
+    margin-top: -140px;
+}
+
+.timeline-item:nth-child(even) {
+    margin-top: 140px;
 }
 
 .timeline-item::before {
@@ -77,8 +93,31 @@ h1 {
     border: 3px solid var(--primary-color);
     border-radius: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 1;
+}
+
+.timeline-item:nth-child(odd)::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 60px;
+    background: var(--primary-color);
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%);
+}
+
+.timeline-item:nth-child(even)::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 60px;
+    background: var(--primary-color);
+    left: 50%;
+    bottom: 50%;
+    transform: translateX(-50%);
 }
 
 .date {
@@ -86,28 +125,24 @@ h1 {
     color: white;
     padding: 8px 20px;
     border-radius: 30px;
-    margin: 0 30px;
+    margin: 10px auto;
     font-weight: 500;
     box-shadow: 0 2px 4px rgba(0,122,255,0.2);
+    z-index: 2;
 }
 
 .content {
     background: var(--background-color);
     padding: 25px;
     border-radius: 12px;
-    width: 40%;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(0, 0, 0, 0.05);
+    margin: 10px 0;
 }
 
 .content h3 {
     color: var(--primary-color);
     margin-bottom: 8px;
-}
-
-/* 为偶数项添加特殊样式 */
-.timeline-item:nth-child(even) {
-    flex-direction: row-reverse;
 }
 
 /* 作品展示样式 */
@@ -166,30 +201,68 @@ footer {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+    .timeline-items {
+        flex-direction: column;
+        padding: 20px;
+        min-width: auto;
+    }
+    
     .timeline-items::before {
+        width: 4px;
+        height: 100%;
         left: 30px;
+        top: 0;
+        background: linear-gradient(180deg, rgba(0,122,255,0.1) 0%, var(--primary-color) 50%, rgba(0,122,255,0.1) 100%);
     }
     
     .timeline-item {
-        flex-direction: row !important;
-        margin-left: 20px;
-        justify-content: flex-start;
-        margin-bottom: 40px;
+        width: auto;
+        margin: 30px 0;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
+        margin-top: 0;
+        margin-left: 50px;
     }
     
     .timeline-item::before {
-        left: 30px;
+        left: -35px;
+        top: 50%;
     }
     
-    .content {
-        width: calc(100% - 120px);
-        margin-left: 20px;
+    .timeline-item::after {
+        display: none;
     }
     
     .date {
-        min-width: 120px;
-        text-align: center;
-        margin: 0;
-        margin-left: 45px;
+        margin: 0 20px;
+        white-space: nowrap;
     }
+    
+    .content {
+        margin: 0;
+        flex: 1;
+    }
+}
+
+/* 添加滚动条样式美化 */
+.timeline::-webkit-scrollbar {
+    height: 8px;
+}
+
+.timeline::-webkit-scrollbar-track {
+    background: var(--secondary-background);
+    border-radius: 4px;
+}
+
+.timeline::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+.timeline::-webkit-scrollbar-thumb:hover {
+    background: #0056b3;
 } 
